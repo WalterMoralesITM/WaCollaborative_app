@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wa_collaborative/pages/business/collaboration_page.dart';
 import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
 
 class CollaborativeDemandPage extends StatefulWidget {
@@ -62,24 +63,26 @@ class DemandCollaborationScreen extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Acción cuando se presiona el botón Exportar
-                },
-                child: Text('Exportar'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Acción cuando se presiona el botón Aprobar
-                },
-                child: Text('Aprobar'),
-              ),
-            ],
-          ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+                onPressed: (){
+                  //codigo onpressed
+                },
+                child: Text('Exportar')
+            ),
+            ElevatedButton(
+                onPressed: (){
+                  //codigo onpressed
+                },
+                child: Text('Aprobar')
+            )
+          ],
+        ),
       ),
       drawer: MenuDrawerPage(),
     );
@@ -100,6 +103,7 @@ class DemandList extends StatelessWidget {
         'cliente': 'Cliente $index',
         'producto': 'Producto $index',
         'estado': status,
+        'ciudad': 'Ciudad $index'
       },
     );
 
@@ -111,6 +115,7 @@ class DemandList extends StatelessWidget {
           cliente: demandData[index]['cliente']!,
           producto: demandData[index]['producto']!,
           estado: demandData[index]['estado']!,
+          ciudad: demandData[index]['ciudad']!
         );
       },
     );
@@ -121,27 +126,31 @@ class DemandCard extends StatelessWidget {
   final String cliente;
   final String producto;
   final String estado;
+  final String ciudad;
 
   DemandCard({
     required this.cliente,
     required this.producto,
     required this.estado,
+    required this.ciudad
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(10),
-      child: ListTile(
-        title: Text('Cliente: $cliente'),
-        subtitle: Text('Producto: $producto\nEstado: $estado'),
-        trailing: ElevatedButton(
-          onPressed: () {
-            // Acción cuando se presiona el botón Colaborar
+        margin: EdgeInsets.all(10),
+        clipBehavior: Clip.hardEdge,
+        child: ListTile(
+          title: Text('Cliente: $cliente'),
+          subtitle: Text('Producto: $producto \nCiudad: $ciudad'),
+          trailing: Text('Estado: $estado'),
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CollaborativePage())
+            );
           },
-          child: Text('Colaborar'),
-        ),
-      ),
-    );
+        )
+      );
   }
 }
