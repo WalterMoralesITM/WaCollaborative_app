@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wa_collaborative/pages/business/collaborative_demand_page.dart';
 import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
 
 class CollaborativePage extends StatefulWidget {
@@ -30,8 +31,20 @@ class DemandManagementScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text('Gestión de Demanda'),
+            title: const Text('Colaboración'),
             pinned: true,
+            actions: [
+              IconButton(
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CollaborativeDemandPage()),
+                    );
+                  },
+                  icon: const Icon(
+                      Icons.arrow_back
+                  )),
+            ],
           ),
           SliverPadding(
             padding: EdgeInsets.all(20.0),
@@ -39,7 +52,7 @@ class DemandManagementScreen extends StatelessWidget {
               delegate: SliverChildListDelegate([
                 // Campos flotantes superiores
                 FloatingFields(),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // Campos de mayo 2024 a diciembre 2025
                 DemandFields(),
               ]),
@@ -51,9 +64,9 @@ class DemandManagementScreen extends StatelessWidget {
         onPressed: () {
           // Acción al presionar el botón de guardar
         },
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
       ),
-      drawer: MenuDrawerPage(),
+      drawer: const MenuDrawerPage()
     );
   }
 }
