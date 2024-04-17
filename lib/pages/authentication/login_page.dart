@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wa_collaborative/pages/authentication/recover_password_page.dart';
-import 'package:wa_collaborative/pages/business/clients_page.dart';
+import '../shared/home_app_bar_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ClientsPage()),
+                  MaterialPageRoute(builder: (context) => HomePageTabsPage()),
                 );
               },
               child: Text('Cliente, esto se borra'),

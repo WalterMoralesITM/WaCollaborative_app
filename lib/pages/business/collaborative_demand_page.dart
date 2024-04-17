@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wa_collaborative/pages/business/collaboration_page.dart';
-import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
 
 class CollaborativeDemandPage extends StatefulWidget {
   const CollaborativeDemandPage({super.key});
@@ -12,13 +11,7 @@ class CollaborativeDemandPage extends StatefulWidget {
 class _CollaborativeDemandPageState extends State<CollaborativeDemandPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Demanda Colaborada',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DemandCollaborationScreen(),
-    );
+    return DemandCollaborationScreen();
   }
 }
 
@@ -27,16 +20,16 @@ class DemandCollaborationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('Demanda Colaborada'),
-      ),
+      ),*/
       body: ListView(
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(10.0),
             child: TextField(
               decoration: InputDecoration(
-                labelText: 'Filtro',
+                labelText: 'Filtrar demanda',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -45,7 +38,7 @@ class DemandCollaborationScreen extends StatelessWidget {
             length: 2,
             child: Column(
               children: [
-                TabBar(
+                const TabBar(
                   tabs: [
                     Tab(text: 'Pendiente'),
                     Tab(text: 'Colaborado'),
@@ -84,7 +77,7 @@ class DemandCollaborationScreen extends StatelessWidget {
           ],
         ),
       ),
-      drawer: MenuDrawerPage(),
+      //drawer: MenuDrawerPage(),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -13,12 +12,11 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: const Text('Historico'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('History Page Content'),
       ),
-      drawer: MenuDrawerPage(),
     );
   }
 }

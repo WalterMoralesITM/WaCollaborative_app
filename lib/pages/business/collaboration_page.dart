@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wa_collaborative/pages/business/collaborative_demand_page.dart';
-import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
+
+import '../customWidges/custom_icon_button_return.dart';
+import '../shared/home_app_bar_page.dart';
 
 class CollaborativePage extends StatefulWidget {
   const CollaborativePage({super.key});
@@ -32,19 +33,13 @@ class DemandManagementScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             title: const Text('Colaboración'),
-            pinned: true,
-            actions: [
-              IconButton(
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const CollaborativeDemandPage()),
-                    );
-                  },
-                  icon: const Icon(
-                      Icons.arrow_back
-                  )),
-            ],
+            leading: CustomIconButtonReturn(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePageTabsPage()),
+                );
+              },
+            ),
           ),
           SliverPadding(
             padding: EdgeInsets.all(20.0),
@@ -66,7 +61,7 @@ class DemandManagementScreen extends StatelessWidget {
         },
         child: const Icon(Icons.save),
       ),
-      drawer: const MenuDrawerPage()
+      //drawer: const MenuDrawerPage()
     );
   }
 }
@@ -189,3 +184,5 @@ class DemandFields extends StatelessWidget {
     'Diciembre',
   ];
 }
+
+

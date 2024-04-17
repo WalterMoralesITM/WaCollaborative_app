@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/shared/menu_drawer_page.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -13,12 +12,11 @@ class _ClientsPageState extends State<ClientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clients'),
+        title: const Text('Clientes'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Clients Page Content'),
       ),
-      drawer: MenuDrawerPage(),
     );
   }
 }
