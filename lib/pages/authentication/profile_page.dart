@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../customWidges/custom_center_flexible_text_with_icon.dart';
+import 'change_password_page.dart';
 import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -41,10 +42,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    Container(
+                    const SizedBox(
                       width: 150,
                       height: 150,
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'Homero Simpson',
                           textAlign: TextAlign.center,
@@ -54,25 +55,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomCenterFlexibleTextWithIcon(
                   iconData:  Icons.email,
                   textValue:  'hjsimpson@plantanuclear.com',
                   sizeText: 15,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomCenterFlexibleTextWithIcon(
                   iconData:  Icons.location_city,
                   textValue:  'Sprinfield',
                   sizeText: 15,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomCenterFlexibleTextWithIcon(
                   iconData:  Icons.work,
                   textValue:  'Inspector de seguridad - sector 7-G',
                   sizeText: 15,
                 ),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -82,17 +83,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   child: Text('Editar perfil'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
 
                   },
                   child: Text('Cerrar sesión'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                    );
                   },
                   child: Text('¿Cambiar tu contraseña?'),
                 ),
