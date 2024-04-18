@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../authentication/profile_page.dart';
 import '../business/clients_page.dart';
 import '../business/collaborative_demand_page.dart';
+import '../graphics/bar_chart_sample_2.dart';
 import '../graphics/line_chart.dart';
+import '../graphics/line_chart_sample_2.dart';
 
 class HomePageTabsPage extends StatefulWidget {
   const HomePageTabsPage({Key? key}) : super(key: key);
@@ -15,7 +17,7 @@ class _HomePageTabsPageState extends State<HomePageTabsPage> {
   final List<Widget> _pages = [
     CollaborativeDemandPage(),
     ClientsPage(),
-    LineChartSample1(),//HistoryPage(),
+    BarChartSample2(),//LineChartSample2(),//HistoryPage(),
     ProfilePage()
   ];
 

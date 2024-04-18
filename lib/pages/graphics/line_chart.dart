@@ -43,7 +43,7 @@ class _LineChart extends StatelessWidget {
   LineTouchData get lineTouchData1 => LineTouchData(
     handleBuiltInTouches: true,
     touchTooltipData: LineTouchTooltipData(
-      getTooltipColor: (touchedSpot) => Colors.blueGrey.withOpacity(0.8),
+      getTooltipColor: (touchedSpot) => Colors.blue,
     ),
   );
 
@@ -314,7 +314,7 @@ class LineChartSample1State extends State<LineChartSample1> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const SizedBox(
-                height: 37,
+                height: 27,
               ),
               const Text(
                 'Monthly Sales',
