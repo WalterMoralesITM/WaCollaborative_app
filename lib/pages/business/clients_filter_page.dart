@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../shared/home_app_bar_page.dart';
-
 class ClientsFilterPage extends StatefulWidget {
   const ClientsFilterPage({super.key});
 
