@@ -76,8 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
-
-
   @override
     Widget build(BuildContext context) {
       return Scaffold(
