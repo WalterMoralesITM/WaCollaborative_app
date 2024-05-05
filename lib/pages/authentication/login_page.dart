@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wa_collaborative/pages/authentication/recover_password_page.dart';
-import '../repository/authentication_repository.dart';
+import 'package:wa_collaborative/repository/user_repository.dart';
+import '../../repository/authentication_repository.dart';
+import '../customWidges/sized_box_line_break.dart';
 import '../shared/home_app_bar_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,10 +19,16 @@ class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = true;
 
   final AuthRepository _authRepository = AuthRepository();
+  final UserRepository _userRepository = UserRepository();
 
   Future<void> _signIn() async {
     try {
       final token = await _authRepository.signIn(_email.text, _password.text);
+
+      if(token != null){
+        await _userRepository.getStoredUserData(token.toString());
+      }
+
       print('Inicio de sesión exitoso. Token JWT: $token');
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePageTabsPage()));
@@ -61,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               width: 150,
               height: 150,
             ),
-            SizedBox(height: 20),
+            SizedBoxLineBreak(),
             TextFormField(
               controller: _email,
               decoration: const InputDecoration(
@@ -73,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
               validator: (value) =>
               value!.isValidEmail() ? null : 'Correo invalido',
             ),
-            SizedBox(height: 20),
+            SizedBoxLineBreak(),
             TextFormField(
               controller: _password,
               obscureText: _passwordVisible,
@@ -94,13 +102,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               keyboardType: TextInputType.text,
             ),
-            SizedBox(height: 20),
+            SizedBoxLineBreak(),
             ElevatedButton(
               onPressed:
                 _signIn,
               child: Text('Login'),
             ),
-            SizedBox(height: 10),
+            SizedBoxLineBreak(),
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -110,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text('¿Olvidaste tu contraseña?'),
             ),
-            SizedBox(height: 10),
+            SizedBoxLineBreak(),
             TextButton(
               onPressed: () {
                 Navigator.push(

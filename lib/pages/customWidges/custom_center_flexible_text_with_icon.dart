@@ -18,7 +18,7 @@ class CustomCenterFlexibleTextWithIcon extends StatelessWidget{
       child: Row(
         children: [
           Icon(iconData),
-          SizedBox(width: 10), // Espacio entre el icono y el texto
+          const SizedBox(width: 10), // Espacio entre el icono y el texto
           Flexible(
             child:
             Text(
