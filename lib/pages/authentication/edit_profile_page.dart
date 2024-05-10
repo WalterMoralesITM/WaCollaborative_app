@@ -7,6 +7,7 @@ import '../../models/user.dart';
 import '../../repository/authentication_repository.dart';
 import '../../repository/user_repository.dart';
 import '../customWidges/sized_box_line_break.dart';
+import '../shared/home_app_bar_page.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final StreamController<User> _userController = StreamController<User>();
   final UserRepository _userRepository = UserRepository();
   final AuthRepository _authRepository = AuthRepository();
+  final HomePageTabsPage _homePageTabsPage = HomePageTabsPage();
   late User _user;
 
   @override
@@ -44,16 +46,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> _getUser() async {
     String? bearerToken = await _authRepository.getToken();
     Map<String, dynamic>? userData =
-    await _userRepository.getStoredUserData(false);
+    await _userRepository.getStoredUserData(true);
     _user = User.fromJson(userData);
     _userController.add(_user);
     _initializeFields();
   }
 
-  Future<void> _updateUser(var context) async {
+  Future<void> _updateUser() async {
     await _userRepository.updateUser(_user);
     //Navigator.of(context).pop(); // Cierra la ventana emergente
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+    //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageTabsPage()));
+    navigateToPage(context, 3);
+  }
+
+  navigateToPage(BuildContext context, int pageIndex) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePageTabsPage(initialTabIndex: pageIndex),
+      ),
+    );
   }
 
   Future<void> _clicOnSave() async {
@@ -72,7 +84,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             TextButton(
               onPressed: () {
-                _updateUser(context); // Llama a la función para cerrar sesión
+                //_updateUser(context); // Llama a la función para cerrar sesión
               },
               child: const Text('Sí'),
             ),
@@ -147,7 +159,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _clicOnSave,
+                    onPressed: _updateUser,
                     child: const Text('Guardar'),
                   ),
                 ],

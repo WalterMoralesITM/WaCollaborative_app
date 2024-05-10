@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
         await _userRepository.getStoredUserData(false);
       }
 
-      print('Inicio de sesión exitoso. Token JWT: $token');
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePageTabsPage()));
     } catch (e) {

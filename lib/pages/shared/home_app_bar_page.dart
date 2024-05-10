@@ -5,7 +5,9 @@ import '../business/collaborative_demand_page.dart';
 import '../graphics/bar_chart_sample_2.dart';
 
 class HomePageTabsPage extends StatefulWidget {
-  const HomePageTabsPage({Key? key}) : super(key: key);
+  final int initialTabIndex; // Nuevo: Índice del tab inicial
+
+  const HomePageTabsPage({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   State<HomePageTabsPage> createState() => _HomePageTabsPageState();
@@ -15,15 +17,16 @@ class _HomePageTabsPageState extends State<HomePageTabsPage> {
   final List<Widget> _pages = [
     CollaborativeDemandPage(),
     ClientsPage(),
-    BarChartSample2(),//LineChartSample2(),//HistoryPage(),
-    ProfilePage()
+    BarChartSample2(),
+    ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 4,
+        length: _pages.length,
+        initialIndex: widget.initialTabIndex, // Nuevo: Índice inicial
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
@@ -46,5 +49,5 @@ class _HomePageTabsPageState extends State<HomePageTabsPage> {
 }
 
 void navigateToPage(BuildContext context, int pageIndex) {
-  DefaultTabController.of(context).animateTo(pageIndex);
+  DefaultTabController.of(context)?.animateTo(pageIndex);
 }
