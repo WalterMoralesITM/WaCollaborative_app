@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       final token = await _authRepository.signIn(_email.text, _password.text);
 
       if(token != null){
-        await _userRepository.getStoredUserData(token.toString());
+        await _userRepository.getStoredUserData(false);
       }
 
       print('Inicio de sesión exitoso. Token JWT: $token');
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Error al iniciar sesión: $e'),
+            content: Text('Error al iniciar sesión'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -55,15 +55,27 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('Iniciar Sesión'),
-      ),
+      ),*/
       body: SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBoxLineBreak(),
+            SizedBoxLineBreak(),
+            const SizedBox(
+              width: 150,
+              height: 150,
+              child: Center(
+                child: Text(
+                  "Cerrar sesión",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
             Image.asset(
               'assets/images/img.png',
               width: 150,
