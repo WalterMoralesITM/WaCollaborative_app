@@ -72,12 +72,13 @@ class UserRepository{
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+        await getStoredUserData(true);
       } else {
         throw Exception('Failed to sign in: ${response.statusCode}');
       }
     }
     catch(e){
-      print("error $e.");
+
     }
 
   }
