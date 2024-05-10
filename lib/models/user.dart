@@ -62,6 +62,25 @@ class User {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    'document': document,
+    'firstName': firstName,
+    'lastName': lastName,
+    'address': address,
+    'photo': null,
+    'userType': userType,
+    'city': city.toJson(), // Llamar al método toJson() de City
+    'cityId': cityId,
+    'internalRoleId': internalRoleId,
+    'portfolioId': portfolioId,
+    'id': id,
+    'userName': userName,
+    'normalizedUserName': normalizedUserName,
+    'email': email,
+    'normalizedEmail': normalizedEmail,
+    'phoneNumber': phoneNumber,
+    'phoneNumberConfirmed': phoneNumberConfirmed,
+  };
 }
 
 class City {
@@ -85,6 +104,13 @@ class City {
       stateUser: StateUser.fromJson(json['state']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'stateId': stateUserId,
+    'state': stateUser.toJson(), // Llamar al método toJson() de StateUser
+  };
 }
 
 class StateUser {
@@ -108,6 +134,13 @@ class StateUser {
       country: Country.fromJson(json['country']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'countryId': countryId,
+    'country': country.toJson(), // Llamar al método toJson() de Country
+  };
 }
 
 class Country {
@@ -131,4 +164,11 @@ class Country {
       statesNumber: json['statesNumber'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'states': states,
+    'statesNumber': statesNumber,
+  };
 }

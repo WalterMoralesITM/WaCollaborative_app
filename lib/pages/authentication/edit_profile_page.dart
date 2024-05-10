@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:wa_collaborative/pages/authentication/profile_page.dart';
 
 import '../../models/user.dart';
 import '../../repository/authentication_repository.dart';
@@ -43,11 +44,45 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> _getUser() async {
     String? bearerToken = await _authRepository.getToken();
     Map<String, dynamic>? userData =
-    await _userRepository.getStoredUserData(bearerToken.toString());
+    await _userRepository.getStoredUserData(false);
     _user = User.fromJson(userData);
     _userController.add(_user);
     _initializeFields();
   }
+
+  Future<void> _updateUser(var context) async {
+    await _userRepository.updateUser(_user);
+    //Navigator.of(context).pop(); // Cierra la ventana emergente
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+  }
+
+  Future<void> _clicOnSave() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Guardar"),
+          content: const Text("¿Está seguro que desea guardar los cambios?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra la ventana emergente
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                _updateUser(context); // Llama a la función para cerrar sesión
+              },
+              child: const Text('Sí'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      // Lógica para guardar los cambios
-                    },
+                    onPressed: _clicOnSave,
                     child: const Text('Guardar'),
                   ),
                 ],

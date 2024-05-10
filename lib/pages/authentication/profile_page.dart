@@ -29,9 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _getUser() async {
     try {
-      String? bearerToken = await _authRepository.getToken();
-      Map<String, dynamic>? userData = await _userRepository.getStoredUserData(
-          bearerToken.toString());
+      Map<String, dynamic>? userData = await _userRepository.getStoredUserData(false);
       _user = User.fromJson(userData);
       setState(() {
         _isLoading = false;
@@ -72,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _cerrarSesion(BuildContext context) {
-     _authRepository.logOut();
+    _authRepository.logOut();
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
