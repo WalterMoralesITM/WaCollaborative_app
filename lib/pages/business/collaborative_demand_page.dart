@@ -1,114 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:wa_collaborative/pages/business/collaboration_page.dart';
+import 'package:wa_collaborative/repository/collaborative_demand_repository.dart';
+
+import '../../models/collaborative_demand_grouped.dart';
 
 class CollaborativeDemandPage extends StatefulWidget {
-  const CollaborativeDemandPage({super.key});
+  const CollaborativeDemandPage({Key? key}) : super(key: key);
 
   @override
   State<CollaborativeDemandPage> createState() => _CollaborativeDemandPageState();
 }
 
 class _CollaborativeDemandPageState extends State<CollaborativeDemandPage> {
+  final CollaborativeDemandRepository _repository = CollaborativeDemandRepository();
+
   @override
   Widget build(BuildContext context) {
-    return DemandCollaborationScreen();
+    return DemandCollaborationScreen(repository: _repository);
   }
 }
 
-
 class DemandCollaborationScreen extends StatelessWidget {
+  final CollaborativeDemandRepository repository;
+
+  DemandCollaborationScreen({required this.repository});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        title: Text('Demanda Colaborada'),
-      ),*/
-      body: ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'Filtrar demanda',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ),
-          DefaultTabController(
-            length: 2,
-            child: Column(
+      body: FutureBuilder<List<CollaborativeDemandGrouped>>(
+        future: repository.getCollaborativeDemand(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error al cargar los datos'),
+            );
+          } else if (snapshot.hasData) {
+            return ListView(
               children: [
-                const TabBar(
-                  tabs: [
-                    Tab(text: 'Pendiente'),
-                    Tab(text: 'Colaborado'),
-                  ],
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Filtrar demanda',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: TabBarView(
+                DefaultTabController(
+                  length: 2,
+                  child: Column(
                     children: [
-                      DemandList(status: 'Pendiente'),
-                      DemandList(status: 'Colaborado'),
+                      const TabBar(
+                        tabs: [
+                          Tab(text: 'Activo'),
+                          Tab(text: 'Colaborado'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.75,
+                        child: TabBarView(
+                          children: [
+                            DemandList(status: 'Activo', demandData: snapshot.data!),
+                            DemandList(status: 'Colaborado', demandData: snapshot.data!),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
+            );
+          } else {
+            return Center(
+              child: Text('No hay datos disponibles'),
+            );
+          }
+        },
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-                onPressed: (){
-                  //codigo onpressed
-                },
-                child: Text('Exportar')
-            ),
-            ElevatedButton(
-                onPressed: (){
-                  //codigo onpressed
-                },
-                child: Text('Aprobar')
-            )
-          ],
-        ),
-      ),
-      //drawer: MenuDrawerPage(),
     );
   }
 }
 
 class DemandList extends StatelessWidget {
   final String status;
+  final List<CollaborativeDemandGrouped> demandData;
 
-  DemandList({required this.status});
+  DemandList({required this.status, required this.demandData});
 
   @override
   Widget build(BuildContext context) {
-    // Simulando datos de demanda estática
-    List<Map<String, String>> demandData = List.generate(
-      20,
-          (index) => {
-        'cliente': 'Cliente $index',
-        'producto': 'Producto $index',
-        'estado': status,
-        'ciudad': 'Ciudad $index'
-      },
-    );
+    final filteredData = demandData.where((demand) => demand.status.name == status).toList();
 
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: demandData.length,
+      itemCount: filteredData.length,
       itemBuilder: (context, index) {
         return DemandCard(
-          cliente: demandData[index]['cliente']!,
-          producto: demandData[index]['producto']!,
-          estado: demandData[index]['estado']!,
-          ciudad: demandData[index]['ciudad']!
+          demand: filteredData[index],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CollaborativePage()),
+            );
+          },
         );
       },
     );
@@ -116,34 +115,22 @@ class DemandList extends StatelessWidget {
 }
 
 class DemandCard extends StatelessWidget {
-  final String cliente;
-  final String producto;
-  final String estado;
-  final String ciudad;
+  final CollaborativeDemandGrouped demand;
+  final VoidCallback onTap;
 
-  DemandCard({
-    required this.cliente,
-    required this.producto,
-    required this.estado,
-    required this.ciudad
-  });
+  DemandCard({required this.demand, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: EdgeInsets.all(10),
-        clipBehavior: Clip.hardEdge,
-        child: ListTile(
-          title: Text('Cliente: $cliente'),
-          subtitle: Text('Producto: $producto \nCiudad: $ciudad'),
-          trailing: Text('Estado: $estado'),
-          onTap: (){
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CollaborativePage())
-            );
-          },
-        )
-      );
+      margin: EdgeInsets.all(10),
+      clipBehavior: Clip.hardEdge,
+      child: ListTile(
+        title: Text('Cliente: ${demand.customer.name}'),
+        subtitle: Text('Producto: ${demand.product.name} \nCiudad: ${demand.city.name}'),
+        trailing: Text('Estado: ${demand.status.name}'),
+        onTap: onTap,
+      ),
+    );
   }
 }
