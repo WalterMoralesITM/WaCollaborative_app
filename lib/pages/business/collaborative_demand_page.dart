@@ -105,7 +105,7 @@ class DemandList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CollaborativePage()),
+              MaterialPageRoute(builder: (context) => CollaborativePage(collaborativeDemandId: filteredData[index].collaborativeDemandId)),
             );
           },
         );
@@ -128,7 +128,7 @@ class DemandCard extends StatelessWidget {
       child: ListTile(
         title: Text('Cliente: ${demand.customer.name}'),
         subtitle: Text('Producto: ${demand.product.name} \nCiudad: ${demand.city.name}'),
-        trailing: Text('Estado: ${demand.status.name}'),
+        //trailing: Text('Estado: ${demand.status.name}'),
         onTap: onTap,
       ),
     );

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../appconfig.dart';
+import '../models/collaborative_demand_detail.dart';
 import '../models/collaborative_demand_grouped.dart';
 
 
@@ -42,6 +43,34 @@ class CollaborativeDemandRepository {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
     return parsed;
+  }
+
+  Future<List<CollaborativeDemandDetail>> getCollaborativeDemandDetail(int collaborativeDemandId) async {
+
+    final Uri url = Uri.parse('${AppConfig.baseUrl}/api/CollaborativeDemand/GetByCollaborativeDemandIdAsync/$collaborativeDemandId');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var bearerToken = prefs.getString('token');
+    late List<CollaborativeDemandDetail> collaborativeDemandDetail;
+
+    final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept':'/*/',
+          'Accept-Encoding':'gzip, deflate, br',
+          'Connection':'keep-alive',
+          'Authorization': 'Bearer $bearerToken',
+        }
+    );
+
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> responseData = parseResponse(response.body);
+
+      collaborativeDemandDetail = responseData.map((item) => CollaborativeDemandDetail.fromJson(item)).toList();
+      return collaborativeDemandDetail;
+    } else {
+      throw Exception('Falló la petición: ${response.statusCode}');
+    }
   }
 
 }
