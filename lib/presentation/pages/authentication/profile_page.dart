@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
-import '../../repository/authentication_repository.dart';
-import '../../repository/user_repository.dart';
-import '../customWidges/custom_center_flexible_text_with_icon.dart';
-import '../customWidges/sized_box_line_break.dart';
+import '../../../data/remoteData/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
+import '../../../domain/entities/user.dart';
+import '../../customWidges/custom_center_flexible_text_with_icon.dart';
+import '../../customWidges/sized_box_line_break.dart';
 import 'change_password_page.dart';
 import 'edit_profile_page.dart';
 import 'login_page.dart';

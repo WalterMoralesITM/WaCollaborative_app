@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../appconfig.dart';
-import '../models/collaborative_demand_detail.dart';
-import '../models/collaborative_demand_grouped.dart';
+import '../../appconfig.dart';
+import '../../domain/entities/collaborative_demand_detail.dart';
+import '../../domain/entities/collaborative_demand_grouped.dart';
 
 
 class CollaborativeDemandRepository {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/business/collaboration_page.dart';
-import 'package:wa_collaborative/repository/collaborative_demand_repository.dart';
+import 'package:wa_collaborative/data/remoteData/collaborative_demand_repository.dart';
+import '../../../domain/entities/collaborative_demand_grouped.dart';
+import 'collaboration_page.dart';
 
-import '../../models/collaborative_demand_grouped.dart';
 
 class CollaborativeDemandPage extends StatefulWidget {
   const CollaborativeDemandPage({Key? key}) : super(key: key);

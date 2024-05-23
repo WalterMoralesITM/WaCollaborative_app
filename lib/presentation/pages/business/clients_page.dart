@@ -1,7 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/business/clients_filter_page.dart';
+
+import 'clients_filter_page.dart';
+
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
