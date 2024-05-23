@@ -72,4 +72,35 @@ class CollaborativeDemandRepository {
     }
   }
 
+  Future<String?> updateCollaborativeDemandDetail(List<CollaborativeDemandDetail> collaborations) async {
+
+    try{
+      final Uri url = Uri.parse('${AppConfig.baseUrl}/api/CollaborativeDemandComponentsDetail/SaveCollaborationAsync');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var bearerToken = prefs.getString('token');
+      List<Map<String, dynamic>> collaborationJsonList = collaborations.map((item) => item.toJson()).toList();
+      var collaborationJsonEncode = jsonEncode(collaborationJsonList);
+      final response = await http.put(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept':'/*/',
+            'Accept-Encoding':'gzip, deflate, br',
+            'Connection':'keep-alive',
+            'Authorization': 'Bearer $bearerToken',
+          },
+          body: collaborationJsonEncode
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+      } else {
+        throw Exception('Failed to sign in: ${response.statusCode}');
+      }
+    }
+    catch(e){
+
+    }
+
+  }
 }
