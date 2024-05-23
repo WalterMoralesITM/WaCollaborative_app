@@ -31,4 +31,16 @@ class CollaborativeDemandDetail {
     cityName = json['cityName'] ;
   }
 
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'quantity': quantity,
+    'yearMonth': yearMonth,
+    'collaborativeDemandId': collaborativeDemandId,
+    'customerName': customerName,
+    'productName': productName,
+    'cityName': cityName,
+
+  };
+
 }

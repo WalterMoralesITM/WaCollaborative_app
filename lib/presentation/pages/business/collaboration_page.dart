@@ -7,7 +7,6 @@ import '../../customWidges/custom_icon_button_return.dart';
 import '../shared/home_app_bar_page.dart';
 
 class CollaborativePage extends StatefulWidget {
-
   final int collaborativeDemandId;
 
   const CollaborativePage({Key? key, required this.collaborativeDemandId});
@@ -18,10 +17,9 @@ class CollaborativePage extends StatefulWidget {
 
 class _CollaborativePageState extends State<CollaborativePage> {
   final CollaborativeDemandRepository _repository = CollaborativeDemandRepository();
-
   final int collaborativeDemandId;
 
-   _CollaborativePageState({
+  _CollaborativePageState({
     required this.collaborativeDemandId,
   });
 
@@ -56,12 +54,45 @@ class _CollaborativePageState extends State<CollaborativePage> {
   }
 }
 
-class DemandManagementScreen extends StatelessWidget {
+class DemandManagementScreen extends StatefulWidget {
   final List<CollaborativeDemandDetail> demandDetails;
 
   const DemandManagementScreen({
     required this.demandDetails,
   });
+
+  @override
+  _DemandManagementScreenState createState() => _DemandManagementScreenState();
+}
+
+class _DemandManagementScreenState extends State<DemandManagementScreen> {
+  late List<TextEditingController> _controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = widget.demandDetails
+        .map((detail) => TextEditingController(text: detail.quantity.toString()))
+        .toList();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _saveData() async {
+    final CollaborativeDemandRepository _repository = CollaborativeDemandRepository();
+
+    for (int i = 0; i < widget.demandDetails.length; i++) {
+      double quantityInt = double.parse(_controllers[i].text);
+      widget.demandDetails[i].quantity = quantityInt ;
+    }
+    await _repository.updateCollaborativeDemandDetail(widget.demandDetails);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,19 +117,17 @@ class DemandManagementScreen extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // Campos flotantes superiores
-                FloatingFields(demandDetails: this.demandDetails),
+                FloatingFields(demandDetails: widget.demandDetails),
                 const SizedBox(height: 20.0),
                 // Campos de mayo 2024 a diciembre 2025
-                DemandFields(demandDetails: this.demandDetails),
+                DemandFields(demandDetails: widget.demandDetails, controllers: _controllers),
               ]),
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Acción al presionar el botón de guardar
-        },
+        onPressed: _saveData,
         child: const Icon(Icons.save),
       ),
     );
@@ -125,46 +154,46 @@ class FloatingFields extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
+              const Text(
                 'Cliente: ',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Expanded(
                 child: Text(
                   demandDetails.isNotEmpty ? demandDetails[0].customerName : '',
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
+                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Row(
             children: [
-              Text(
+              const Text(
                 'Producto:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Expanded(
                 child: Text(
                   demandDetails.isNotEmpty ? demandDetails[0].productName : '',
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
+                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Row(
             children: [
-              Text(
+              const Text(
                 'Ciudad:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Expanded(
                 child: Text(
                   demandDetails.isNotEmpty ? demandDetails[0].cityName : '',
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
+                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
                 ),
               ),
             ],
@@ -177,9 +206,11 @@ class FloatingFields extends StatelessWidget {
 
 class DemandFields extends StatelessWidget {
   final List<CollaborativeDemandDetail> demandDetails;
+  final List<TextEditingController> controllers;
 
   const DemandFields({
     required this.demandDetails,
+    required this.controllers,
   });
 
   @override
@@ -187,37 +218,69 @@ class DemandFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildYearFields(demandDetails),
-        SizedBox(height: 20.0),
-        //buildYearFields(2025),
+        buildYearFields(demandDetails, controllers),
+        const SizedBox(height: 20.0),
       ],
     );
   }
 
-  Widget buildYearFields(List<CollaborativeDemandDetail> demandDetails) {
+  Widget buildYearFields(List<CollaborativeDemandDetail> demandDetails, List<TextEditingController> controllers) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'año test',//demandDetails.toString(),
+        const Text(
+          'Periodos que tienes para colaborar',
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10.0),
-        // Aquí puedes agregar los campos de texto para cada mes del año
-        // Puedes personalizar el diseño según tus necesidades
-        for (var month in demandDetails) ...[
+        const SizedBox(height: 10.0),
+        for (var i = 0; i < demandDetails.length; i++) ...[
           TextField(
+            controller: controllers[i],
             decoration: InputDecoration(
-              labelText: month.yearMonth.toString(),
+              labelText: getLaberYearAndMonth(demandDetails[i].yearMonth.toString()),
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
         ],
       ],
     );
   }
 
+  String getLaberYearAndMonth(String yearMonth) {
+    String year = yearMonth.toString().substring(0, 4);
+    String month = yearMonth.toString().substring(4, 6);
+    String monthName = getMonthName(month);
 
+    return "$monthName de $year";
+  }
+
+  String getMonthName(String monthNumber) {
+    Map<String, String> meses = {
+      "1": "Enero",
+      "2": "Febrero",
+      "3": "Marzo",
+      "4": "Abril",
+      "5": "Mayo",
+      "6": "Junio",
+      "7": "Julio",
+      "8": "Agosto",
+      "9": "Septiembre",
+      "01": "Enero",
+      "02": "Febrero",
+      "03": "Marzo",
+      "04": "Abril",
+      "05": "Mayo",
+      "06": "Junio",
+      "07": "Julio",
+      "08": "Agosto",
+      "09": "Septiembre",
+      "10": "Octubre",
+      "11": "Noviembre",
+      "12": "Diciembre"
+    };
+
+    return meses[monthNumber] ?? "Número de mes inválido";
+  }
 }
