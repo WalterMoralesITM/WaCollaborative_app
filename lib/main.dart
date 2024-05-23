@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/splash_page.dart';
+import 'presentation/pages/splash_page.dart';
+
 
 void main() {
   runApp(const MyApp());

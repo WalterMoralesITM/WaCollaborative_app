@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/authentication/login_page.dart';
+
+import 'login_page.dart';
+
 
 class RecoverPasswordPage extends StatefulWidget {
   const RecoverPasswordPage({super.key});

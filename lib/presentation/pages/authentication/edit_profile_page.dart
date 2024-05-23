@@ -1,13 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/authentication/profile_page.dart';
-
-import '../../models/user.dart';
-import '../../repository/authentication_repository.dart';
-import '../../repository/user_repository.dart';
-import '../customWidges/sized_box_line_break.dart';
+import '../../../data/remoteData/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
+import '../../../domain/entities/user.dart';
+import '../../customWidges/sized_box_line_break.dart';
 import '../shared/home_app_bar_page.dart';
+
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);

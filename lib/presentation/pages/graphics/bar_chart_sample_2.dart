@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/extensions/color_extensions.dart';
+import 'package:wa_collaborative/presentation/pages/extensions/color_extensions.dart';
 
 import '../resources/app_colors.dart';
 

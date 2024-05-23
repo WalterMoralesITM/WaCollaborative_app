@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wa_collaborative/pages/authentication/recover_password_page.dart';
-import 'package:wa_collaborative/repository/user_repository.dart';
-import '../../repository/authentication_repository.dart';
-import '../customWidges/sized_box_line_break.dart';
+import 'package:wa_collaborative/presentation/pages/authentication/recover_password_page.dart';
+import '../../../data/remoteData/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
+import '../../customWidges/sized_box_line_break.dart';
 import '../shared/home_app_bar_page.dart';
 
 class LoginPage extends StatefulWidget {

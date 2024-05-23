@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../appconfig.dart';
-import '../models/user.dart';
+
+import '../../appconfig.dart';
+import '../../domain/entities/user.dart';
 
 
 class UserRepository{

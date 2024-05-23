@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../models/collaborative_demand_detail.dart';
-import '../../repository/collaborative_demand_repository.dart';
-import '../customWidges/custom_icon_button_return.dart';
+import '../../../data/remoteData/collaborative_demand_repository.dart';
+import '../../../domain/entities/collaborative_demand_detail.dart';
+import '../../customWidges/custom_icon_button_return.dart';
 import '../shared/home_app_bar_page.dart';
 
 class CollaborativePage extends StatefulWidget {
