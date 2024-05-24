@@ -6,8 +6,6 @@ class Product {
   late int categoryId;
   late int measurementUnitId;
   late int segmentId;
-  late int statusId;
-  late Status status;
 
   Product({
     required this.id,
@@ -17,8 +15,6 @@ class Product {
     required this.categoryId,
     required this.measurementUnitId,
     required this.segmentId,
-    required this.statusId,
-    required this.status,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -29,26 +25,21 @@ class Product {
     categoryId = json['categoryId'];
     measurementUnitId = json['measurementUnitId'];
     segmentId = json['segmentId'];
-    statusId = json['statusId'];
-    status = Status.fromJson(json['status']) ;
   }
 }
 
 class Status {
   late int id;
   late String name;
-  late int statusTypeId;
 
   Status({
     required this.id,
     required this.name,
-    required this.statusTypeId,
   });
 
   Status.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    statusTypeId = json['statusTypeId'];
   }
 }
 
@@ -79,18 +70,15 @@ class Customer {
 class City {
   late int id;
   late String name;
-  late int stateId;
 
   City({
     required this.id,
     required this.name,
-    required this.stateId,
   });
 
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    stateId = json['stateId'];
   }
 }
 
@@ -98,14 +86,14 @@ class CollaborativeDemandGrouped {
   late Product product;
   late Customer customer;
   late City city;
-  late Status status;
   late int collaborativeDemandId;
+  late String statusName;
 
   CollaborativeDemandGrouped({
     required this.product,
     required this.customer,
     required this.city,
-    required this.status,
+    required this.statusName,
     required this.collaborativeDemandId,
   });
 
@@ -118,7 +106,7 @@ class CollaborativeDemandGrouped {
     product = Product.fromJson(json['product']) ;
     customer = Customer.fromJson(json['customer']);
     city = City.fromJson(json['city']) ;
-    status = Status.fromJson(json['status']) ;
+    statusName =json['statusName'] ;
     collaborativeDemandId = json['collaborativeDemandId'];
   }
 
