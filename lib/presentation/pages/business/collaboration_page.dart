@@ -67,6 +67,7 @@ class DemandManagementScreen extends StatefulWidget {
 
 class _DemandManagementScreenState extends State<DemandManagementScreen> {
   late List<TextEditingController> _controllers;
+  bool _isSaving = false;  // Nueva variable de estado
 
   @override
   void initState() {
@@ -85,45 +86,65 @@ class _DemandManagementScreenState extends State<DemandManagementScreen> {
   }
 
   void _saveData() async {
+    setState(() {
+      _isSaving = true;  // Indicamos que se está guardando
+    });
+
     final CollaborativeDemandRepository _repository = CollaborativeDemandRepository();
 
     for (int i = 0; i < widget.demandDetails.length; i++) {
-      double quantityInt = double.parse(_controllers[i].text);
-      widget.demandDetails[i].quantity = quantityInt ;
+      String quantityText = _controllers[i].text == null || _controllers[i].text.isEmpty ? "0": _controllers[i].text;
+      double quantityInt = double.parse(quantityText);
+      widget.demandDetails[i].quantity = quantityInt;
     }
     await _repository.updateCollaborativeDemandDetail(widget.demandDetails);
+
+    setState(() {
+      _isSaving = false;  // Indicamos que se ha terminado de guardar
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: const Text('Colaboración'),
-            leading: CustomIconButtonReturn(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePageTabsPage(),
-                  ),
-                );
-              },
-            ),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: const Text('Colaboración'),
+                leading: CustomIconButtonReturn(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePageTabsPage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.all(20.0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    // Campos flotantes superiores
+                    FloatingFields(demandDetails: widget.demandDetails),
+                    const SizedBox(height: 20.0),
+                    // Campos de mayo 2024 a diciembre 2025
+                    DemandFields(demandDetails: widget.demandDetails, controllers: _controllers),
+                  ]),
+                ),
+              ),
+            ],
           ),
-          SliverPadding(
-            padding: EdgeInsets.all(20.0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                // Campos flotantes superiores
-                FloatingFields(demandDetails: widget.demandDetails),
-                const SizedBox(height: 20.0),
-                // Campos de mayo 2024 a diciembre 2025
-                DemandFields(demandDetails: widget.demandDetails, controllers: _controllers),
-              ]),
+          if (_isSaving)  // Indicador de carga
+            Container(
+              color: Colors.black45,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -29,10 +29,16 @@ class CollaborativeDemandRepository {
     );
 
     if (response.statusCode == 200) {
-      List<Map<String, dynamic>> responseData = parseResponse(response.body);
-      //final List<Map<String, dynamic>> responseData = json.decode(response.body);
-      collaborativeDemandGrouped = responseData.map((item) => CollaborativeDemandGrouped.fromJson(item)).toList();
+      try {
+        List<Map<String, dynamic>> responseData = parseResponse(response.body);
+        //final List<Map<String, dynamic>> responseData = json.decode(response.body);
+        collaborativeDemandGrouped = responseData.map((item) => CollaborativeDemandGrouped.fromJson(item)).toList();
+      }
+      catch(e){
+        print(e);
+      }
       return collaborativeDemandGrouped;
+
     } else {
       throw Exception('Falló la petición: ${response.statusCode}');
     }

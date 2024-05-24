@@ -44,12 +44,12 @@ class DemandCollaborationScreen extends StatelessWidget {
               children: [
                 const Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: TextField(
+                  /*child: TextField(
                     decoration: InputDecoration(
                       labelText: 'Filtrar demanda',
                       border: OutlineInputBorder(),
                     ),
-                  ),
+                  ),*/
                 ),
                 DefaultTabController(
                   length: 2,
@@ -66,7 +66,7 @@ class DemandCollaborationScreen extends StatelessWidget {
                         child: TabBarView(
                           children: [
                             DemandList(status: 'Activo', demandData: snapshot.data!),
-                            DemandList(status: 'Colaborado', demandData: snapshot.data!),
+                            DemandList(status: 'Terminado', demandData: snapshot.data!),
                           ],
                         ),
                       ),
@@ -94,7 +94,7 @@ class DemandList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filteredData = demandData.where((demand) => demand.status.name == status).toList();
+    final filteredData = demandData.where((demand) => demand.statusName == status).toList();
 
     return ListView.builder(
       shrinkWrap: true,
