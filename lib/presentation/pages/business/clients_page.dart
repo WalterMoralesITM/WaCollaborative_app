@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'clients_filter_page.dart';
-
+import '../../../data/repositories/customer_repository.dart';
+import '../../../domain/entities/customer_basic_contact.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -12,153 +12,147 @@ class ClientsPage extends StatefulWidget {
 }
 
 class _ClientsPageState extends State<ClientsPage> {
-  late List<List<String>> tableData;
+  late Future<List<CustomerBasicContact>> futureClients;
+  late TextEditingController _searchController;
+  List<CustomerBasicContact> _clients = [];
+  List<CustomerBasicContact> _filteredClients = [];
 
   @override
   void initState() {
     super.initState();
-    // Inicializar la tabla con datos aleatorios
-    tableData = List.generate(12, (index) {
-      final month = _getMonthName(index + 1);
-      return [
-        month.substring(0, 3),
-        _getRandomData(),
-        _getRandomData(),
-        _getRandomData(),
-        _getRandomData(),
-      ];
+    _searchController = TextEditingController();
+    futureClients = getCustomersByUser();
+    futureClients.then((clients) {
+      setState(() {
+        _clients = clients;
+        _filteredClients = clients;
+      });
     });
+    _searchController.addListener(_filterClients);
+  }
+
+  Future<List<CustomerBasicContact>> getCustomersByUser() async {
+    final CustomerRepository _repository = CustomerRepository();
+    return _repository.getCustomerByUserAsync();
+  }
+
+  Future<void> _launchEmail(String email) async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    await launchUrl(emailLaunchUri);
+  }
+
+  Future<void> _launchPhone(String phone) async {
+    final Uri phoneLaunchUri = Uri(
+      scheme: 'tel',
+      path: phone,
+    );
+    await launchUrl(phoneLaunchUri);
+  }
+
+  Future<void> _launchWhatsApp(String phone) async {
+    final Uri whatsappLaunchUri = Uri(
+      scheme: 'https',
+      path: 'wa.me/$phone',
+    );
+    await launchUrl(whatsappLaunchUri);
+  }
+
+  void _filterClients() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredClients = _clients.where((client) {
+        return client.name.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              const Text("Cliente 01"),
-              const SizedBox(height: 16),
-              const Text("Producto 21"),
-              DataTable(
-                columns: const [
-                  DataColumn(label: Text('Mes')),
-                  DataColumn(label: Text('2021')),
-                  DataColumn(label: Text('2022')),
-                  DataColumn(label: Text('2023')),
-                  DataColumn(label: Text('2024')),
-                ],
-                rows: List.generate(12, (index) {
-                  return DataRow(cells: [
-                    DataCell(Text(tableData[index][0])), // Mes
-                    _buildDataCell(tableData[index][1], index, 1), // Año 2021
-                    _buildDataCell(tableData[index][2], index, 2), // Año 2022
-                    _buildDataCell(tableData[index][3], index, 3), // Año 2023
-                    _buildDataCell(tableData[index][4], index, 4), // Año 2024
-                  ]);
-                }),
-              ),
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        title: const Text('Directorio de Clientes'),
       ),
-      floatingActionButton: Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              // Cambiar el estado de la tabla con nuevos datos aleatorios
-              tableData = List.generate(12, (index) {
-                final month = _getMonthName(index + 1);
-                return [
-                  month.substring(0, 3),
-                  _getRandomData(),
-                  _getRandomData(),
-                  _getRandomData(),
-                  _getRandomData(),
-                ];
-              });
-            });
-          },
-          child: const Icon(Icons.refresh),
-        ),
-        const SizedBox(height: 16),
-        FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ClientsFilterPage()),
-            );
-          },
-          child: Icon(Icons.filter_alt),
-        ),
-      ],
-    ),
-   );
-  }
-  String _getMonthName(int monthNumber) {
-    // Obtener el nombre del mes a partir de su número
-    switch (monthNumber) {
-      case 1:
-        return 'Enero';
-      case 2:
-        return 'Febrero';
-      case 3:
-        return 'Marzo';
-      case 4:
-        return 'Abril';
-      case 5:
-        return 'Mayo';
-      case 6:
-        return 'Junio';
-      case 7:
-        return 'Julio';
-      case 8:
-        return 'Agosto';
-      case 9:
-        return 'Septiembre';
-      case 10:
-        return 'Octubre';
-      case 11:
-        return 'Noviembre';
-      case 12:
-        return 'Diciembre';
-      default:
-        return '';
-    }
-  }
-
-  String _getRandomData() {
-    // Generar datos aleatorios entre 0 y 40
-    final random = Random();
-    return '${random.nextInt(41)}';
-  }
-
-  DataCell _buildDataCell(String value, int rowIndex, int colIndex) {
-    // Construir una celda de datos personalizada con el color correspondiente
-    final prevValue = rowIndex > 0 ? int.tryParse(tableData[rowIndex - 1][colIndex]) ?? 0 : 0;
-    final currentValue = int.tryParse(value) ?? 0;
-    Color textColor;
-    if (currentValue > prevValue) {
-      textColor = Colors.green; // Verde si aumenta
-    } else if (currentValue < prevValue) {
-      textColor = Colors.red; // Rojo si disminuye
-    } else {
-      textColor = Colors.black; // Negro si es igual
-    }
-    return DataCell(
-      Text(
-        value,
-        style: TextStyle(color: textColor),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Buscar Cliente',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<CustomerBasicContact>>(
+              future: futureClients,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error al cargar los datos'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No se encontraron clientes'));
+                } else {
+                  return ListView.builder(
+                    itemCount: _filteredClients.length,
+                    itemBuilder: (context, index) {
+                      final client = _filteredClients[index];
+                      return Card(
+                        margin: const EdgeInsets.all(10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                client.name,
+                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text('Dirección: ${client.address}'),
+                              Text('Email: ${client.email}'),
+                              Text('Teléfono: ${client.numberPhone}'),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.email),
+                                    onPressed: () => _launchEmail(client.email),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.phone),
+                                    onPressed: () => _launchPhone(client.numberPhone),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.message),
+                                    onPressed: () => _launchWhatsApp(client.numberPhone),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-
-
