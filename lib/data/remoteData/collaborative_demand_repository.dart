@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wa_collaborative/domain/entities/collaborative_demand_sales.dart';
 import '../../appconfig.dart';
 import '../../domain/entities/collaborative_demand_detail.dart';
 import '../../domain/entities/collaborative_demand_grouped.dart';
@@ -108,5 +109,39 @@ class CollaborativeDemandRepository {
 
     }
 
+  }
+
+  Future<List<CollaborativeDemandSales>> getCollaborativeDemandSales(int collaborativeDemandId) async {
+
+    final Uri url = Uri.parse('${AppConfig.baseUrl}/api/CollaborativeDemand/salesByDemandId/$collaborativeDemandId');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var bearerToken = prefs.getString('token');
+    late List<CollaborativeDemandSales> collaborativeDemandSales;
+
+    final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept':'/*/',
+          'Accept-Encoding':'gzip, deflate, br',
+          'Connection':'keep-alive',
+          'Authorization': 'Bearer $bearerToken',
+        }
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        List<Map<String, dynamic>> responseData = parseResponse(response.body);
+        //final List<Map<String, dynamic>> responseData = json.decode(response.body);
+        collaborativeDemandSales = responseData.map((item) => CollaborativeDemandSales.fromJson(item)).toList();
+      }
+      catch(e){
+        print(e);
+      }
+      return collaborativeDemandSales;
+
+    } else {
+      throw Exception('Falló la petición: ${response.statusCode}');
+    }
   }
 }
