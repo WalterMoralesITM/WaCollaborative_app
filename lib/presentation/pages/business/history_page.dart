@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../data/remoteData/collaborative_demand_repository.dart';
 import '../../customWidges/sized_box_line_break.dart';
-import 'clients_filter_page.dart';
 
 class HistoryPage extends StatefulWidget {
   final int collaborativeDemandId;
@@ -71,10 +69,10 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historico'),
+        title: const Text('Histórico'),
       ),
       body: tableData.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : LayoutBuilder(
         builder: (context, constraints) {
           double columnWidth = constraints.maxWidth / (years.length + 1);
