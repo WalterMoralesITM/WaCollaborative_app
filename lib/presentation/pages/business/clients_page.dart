@@ -118,12 +118,11 @@ class _ClientsPageState extends State<ClientsPage> {
                             children: [
                               Text(
                                 client.name,
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Text('Dirección: ${client.address}'),
                               Text('Email: ${client.email}'),
                               Text('Teléfono: ${client.numberPhone}'),
-                              const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
