@@ -127,18 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(builder: (context) => RecoverPasswordPage()),
                 );
               },
-              child: Text('¿Olvidaste tu contraseña?'),
+              child: const Text('¿Olvidaste tu contraseña?'),
             ),
             SizedBoxLineBreak(),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePageTabsPage()),
-                );
-              },
-              child: Text('Cliente, esto se borra'),
-            ),
           ],
         ),
       ),

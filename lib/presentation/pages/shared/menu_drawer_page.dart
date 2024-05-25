@@ -40,7 +40,7 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HistoryPage()),
+                MaterialPageRoute(builder: (context) => HistoryPage(collaborativeDemandId: 117)),
               );
             },
           ),

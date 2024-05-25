@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wa_collaborative/presentation/pages/business/clients_page.dart';
+import 'package:wa_collaborative/presentation/pages/business/history_page.dart';
 import '../../../data/remoteData/collaborative_demand_repository.dart';
 import '../../../domain/entities/collaborative_demand_detail.dart';
 import '../../customWidges/custom_icon_button_return.dart';
+import '../../customWidges/sized_box_line_break.dart';
 import '../shared/home_app_bar_page.dart';
 
 class CollaborativePage extends StatefulWidget {
@@ -29,8 +32,8 @@ class _CollaborativePageState extends State<CollaborativePage> {
       future: _repository.getCollaborativeDemandDetail(collaborativeDemandId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            body: Center(
+          return const Scaffold(
+            body:  Center(
               child: CircularProgressIndicator(),
             ),
           );
@@ -83,6 +86,22 @@ class _DemandManagementScreenState extends State<DemandManagementScreen> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+
+
+  navigateToPage(BuildContext context, int demandId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HistoryPage(collaborativeDemandId: demandId),
+      ),
+    );
+  }
+
+  void _viewReport() async {
+    int demandId = widget.demandDetails[0].collaborativeDemandId;
+    navigateToPage(context, demandId);
   }
 
   void _saveData() async {
@@ -147,9 +166,19 @@ class _DemandManagementScreenState extends State<DemandManagementScreen> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveData,
-        child: const Icon(Icons.save),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _viewReport,
+            child: const Icon(Icons.access_time_outlined),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: _saveData,
+            child: const Icon(Icons.save),
+          ),
+        ],
       ),
     );
   }
@@ -165,58 +194,16 @@ class FloatingFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      padding: EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
+          Column(
             children: [
-              const Text(
-                'Cliente: ',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: Text(
-                  demandDetails.isNotEmpty ? demandDetails[0].customerName : '',
-                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10.0),
-          Row(
-            children: [
-              const Text(
-                'Producto:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 10.0),
-              Expanded(
-                child: Text(
-                  demandDetails.isNotEmpty ? demandDetails[0].productName : '',
-                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10.0),
-          Row(
-            children: [
-              const Text(
-                'Ciudad:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 10.0),
-              Expanded(
-                child: Text(
-                  demandDetails.isNotEmpty ? demandDetails[0].cityName : '',
-                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
-                ),
-              ),
+              Text(demandDetails.isNotEmpty ? demandDetails[0].customerName : ''),
+              SizedBoxLineBreak(),
+              Text(demandDetails.isNotEmpty ? demandDetails[0].productName : ''),
+              SizedBoxLineBreak(),
+              Text(demandDetails.isNotEmpty ? demandDetails[0].cityName : ''),
             ],
           ),
         ],
