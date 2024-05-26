@@ -6,12 +6,46 @@ import 'package:wa_collaborative/domain/entities/report_assert.dart';
 import '../../appconfig.dart';
 import '../../domain/entities/collaborative_demand_detail.dart';
 import '../../domain/entities/collaborative_demand_grouped.dart';
+import '../../domain/entities/report_global_assert.dart';
 
 
 class CollaborativeDemandRepository {
 
   CollaborativeDemandRepository();
 
+  Future<ReportGlobalAssert> getGlobalAssertAsync() async {
+
+    final Uri url = Uri.parse('${AppConfig.baseUrl}/api/CollaborativeDemand/getGlobalAssertAsync');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var bearerToken = prefs.getString('token');
+    late ReportGlobalAssert reportAssert;
+
+    final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept':'/*/',
+          'Accept-Encoding':'gzip, deflate, br',
+          'Connection':'keep-alive',
+          'Authorization': 'Bearer $bearerToken',
+        }
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        final Map<String, dynamic> reportData = json.decode(response.body);
+        //final List<Map<String, dynamic>> responseData = json.decode(response.body);
+        reportAssert = ReportGlobalAssert.fromJson(reportData);
+      }
+      catch(e){
+        print(e);
+      }
+      return reportAssert;
+
+    } else {
+      throw Exception('Falló la petición: ${response.statusCode}');
+    }
+  }
 
   Future<List<ReportAssert>> getDetailHistoryAssertAsync(int collaborativeDemandId) async {
 

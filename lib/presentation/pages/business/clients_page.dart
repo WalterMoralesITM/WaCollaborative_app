@@ -85,14 +85,18 @@ class _ClientsPageState extends State<ClientsPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Buscar Cliente',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
+            child: Container(
+              //width: 200,  // Ajusta el ancho a tu preferencia
+              height: 40,  // Ajusta la altura a tu preferencia
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  labelText: 'Buscar Cliente',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
-            ),
+            )
           ),
           Expanded(
             child: FutureBuilder<List<CustomerBasicContact>>(

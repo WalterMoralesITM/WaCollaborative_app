@@ -57,7 +57,7 @@ class BarChartSample2State extends State<BarChartSample2> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Cantidad Proyectada vs Real $year')),
+      appBar: AppBar(title: Text('Proyectado vs Real $year')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: LineChart(

@@ -4,6 +4,7 @@ import '../business/clients_page.dart';
 import '../business/collaborative_demand_history_page.dart';
 import '../business/collaborative_demand_page.dart';
 import '../graphics/bar_chart_sample_2.dart';
+import '../graphics/pie_chart_page.dart';
 
 class HomePageTabsPage extends StatefulWidget {
   final int initialTabIndex; // Nuevo: Índice del tab inicial
@@ -19,7 +20,7 @@ class _HomePageTabsPageState extends State<HomePageTabsPage> {
     CollaborativeDemandPage(),
     CollaborativeDemandHistoryPage(),
     ClientsPage(),
-    BarChartSample2(collaborativeDemandId: 131),
+    PieChartPage(),
     ProfilePage(),
   ];
 
