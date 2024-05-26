@@ -18,7 +18,7 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
             child: Text('Menu'),
             decoration: BoxDecoration(
               color: Colors.blue,

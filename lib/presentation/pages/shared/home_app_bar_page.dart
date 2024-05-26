@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../authentication/profile_page.dart';
 import '../business/clients_page.dart';
+import '../business/collaborative_demand_history_page.dart';
 import '../business/collaborative_demand_page.dart';
 import '../graphics/bar_chart_sample_2.dart';
+import '../graphics/pie_chart_page.dart';
 
 class HomePageTabsPage extends StatefulWidget {
   final int initialTabIndex; // Nuevo: Índice del tab inicial
@@ -16,8 +18,9 @@ class HomePageTabsPage extends StatefulWidget {
 class _HomePageTabsPageState extends State<HomePageTabsPage> {
   final List<Widget> _pages = [
     CollaborativeDemandPage(),
+    CollaborativeDemandHistoryPage(),
     ClientsPage(),
-    BarChartSample2(),
+    PieChartPage(),
     ProfilePage(),
   ];
 
@@ -32,6 +35,7 @@ class _HomePageTabsPageState extends State<HomePageTabsPage> {
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.folder_shared)),
+                Tab(icon: Icon(Icons.folder_off_rounded)),
                 Tab(icon: Icon(Icons.supervisor_account)),
                 Tab(icon: Icon(Icons.history)),
                 Tab(icon: Icon(Icons.person)),

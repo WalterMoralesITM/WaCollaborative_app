@@ -88,6 +88,8 @@ class CollaborativeDemandGrouped {
   late City city;
   late int collaborativeDemandId;
   late String statusName;
+  late int initialPeriod;
+  late int finalPeriod;
 
   CollaborativeDemandGrouped({
     required this.product,
@@ -95,6 +97,8 @@ class CollaborativeDemandGrouped {
     required this.city,
     required this.statusName,
     required this.collaborativeDemandId,
+    required this.finalPeriod,
+    required this.initialPeriod
   });
 
 
@@ -108,6 +112,8 @@ class CollaborativeDemandGrouped {
     city = City.fromJson(json['city']) ;
     statusName =json['statusName'] ;
     collaborativeDemandId = json['collaborativeDemandId'];
+    finalPeriod = json['finalPeriod'];
+    initialPeriod = json['initialPeriod'];
   }
 
 }
