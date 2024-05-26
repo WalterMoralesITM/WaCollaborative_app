@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:wa_collaborative/data/remoteData/collaborative_demand_repository.dart';
 import '../../../domain/entities/collaborative_demand_grouped.dart';
+import '../graphics/bar_chart_sample_2.dart';
 import 'collaboration_page.dart';
 
-
-class CollaborativeDemandPage extends StatefulWidget {
-  const CollaborativeDemandPage({Key? key}) : super(key: key);
+class CollaborativeDemandHistoryPage extends StatefulWidget {
+  const CollaborativeDemandHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<CollaborativeDemandPage> createState() => _CollaborativeDemandPageState();
+  State<CollaborativeDemandHistoryPage> createState() => _CollaborativeDemandHistoryPage();
 }
 
-class _CollaborativeDemandPageState extends State<CollaborativeDemandPage> {
+class _CollaborativeDemandHistoryPage extends State<CollaborativeDemandHistoryPage> {
   final CollaborativeDemandRepository _repository = CollaborativeDemandRepository();
 
   @override
@@ -29,7 +29,7 @@ class DemandCollaborationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<CollaborativeDemandGrouped>>(
-        future: repository.getCollaborativeDemand(),
+        future: repository.getCollaborativeDemandHistory(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -40,41 +40,7 @@ class DemandCollaborationScreen extends StatelessWidget {
               child: Text('Error al cargar los datos'),
             );
           } else if (snapshot.hasData) {
-            return ListView(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  /*child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Filtrar demanda',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),*/
-                ),
-                DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      const TabBar(
-                        tabs: [
-                          Tab(text: 'Activo'),
-                          Tab(text: 'Colaborado'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.75,
-                        child: TabBarView(
-                          children: [
-                            DemandList(status: 'Activo', demandData: snapshot.data!),
-                            DemandList(status: 'Terminado', demandData: snapshot.data!),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
+            return DemandList(demandData: snapshot.data!);
           } else {
             return Center(
               child: Text('No hay datos disponibles'),
@@ -87,25 +53,21 @@ class DemandCollaborationScreen extends StatelessWidget {
 }
 
 class DemandList extends StatelessWidget {
-  final String status;
   final List<CollaborativeDemandGrouped> demandData;
 
-  DemandList({required this.status, required this.demandData});
+  DemandList({required this.demandData});
 
   @override
   Widget build(BuildContext context) {
-    final filteredData = demandData.where((demand) => demand.statusName == status).toList();
-
     return ListView.builder(
-      shrinkWrap: true,
-      itemCount: filteredData.length,
+      itemCount: demandData.length,
       itemBuilder: (context, index) {
         return DemandCard(
-          demand: filteredData[index],
+          demand: demandData[index],
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CollaborativePage(collaborativeDemandId: filteredData[index].collaborativeDemandId)),
+              MaterialPageRoute(builder: (context) => BarChartSample2(collaborativeDemandId: demandData[index].collaborativeDemandId)),
             );
           },
         );
@@ -128,6 +90,7 @@ class DemandCard extends StatelessWidget {
       child: ListTile(
         title: Text('Cliente: ${demand.customer.name}'),
         subtitle: Text('Producto: ${demand.product.name} \nCiudad: ${demand.city.name} \nPeriodo: ${demand.initialPeriod.toString().substring(0,4)}/${demand.initialPeriod.toString().substring(4,6)}  - ${demand.finalPeriod.toString().substring(0,4)}/${demand.finalPeriod.toString().substring(4,6)}'),
+
         //trailing: Text('Estado: ${demand.status.name}'),
         onTap: onTap,
       ),

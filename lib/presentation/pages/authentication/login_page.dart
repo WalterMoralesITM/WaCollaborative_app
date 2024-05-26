@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 150,
               child: Center(
                 child: Text(
-                  "Cerrar sesión",
+                  "Iniciar sesión",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
